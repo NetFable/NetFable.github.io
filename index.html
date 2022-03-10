@@ -20,7 +20,7 @@
 //drd[0]!=window.location.href&&window.location.replace(drd[0]);
 
  ///////register service worker ######
- if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js', { scope: './' })}
+ if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js', { scope: './' })}
  var deferredPrompt
  window.addEventListener('beforeinstallprompt', (e) => {
    e.preventDefault();
