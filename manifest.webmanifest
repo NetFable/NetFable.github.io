@@ -3,7 +3,7 @@
     "background_color": "#000000",
     "display": "standalone",
     "orientation":"landscape",
-    "scope": "/",
+    "scope": ".",
     "start_url": "/",
     "name": "NetFable",
     "short_name": "NetFable",
