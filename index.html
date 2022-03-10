@@ -38,7 +38,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 })
 document.onclick = function(clikk){
   if(!installed){
-    deferredPrompt.prompt()
+    //deferredPrompt.prompt()
     window.location.replace(drd[0],'_blank')
     return
   }
