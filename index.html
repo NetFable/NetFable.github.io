@@ -6,13 +6,14 @@
     <link rel='manifest' href="manifest.webmanifest">
     <link rel='icon' href="ico.png">
   </head>
-  <intent-filter>
+  <intent-filter android:autoVerify="true">
     <action android:name="android.intent.action.VIEW" />
     <category android:name="android.intent.category.DEFAULT" />
     <category android:name="android.intent.category.BROWSABLE" />
     <data
       android:scheme="https"
-      android:host="https://netfable.github.io/"
+      android:scheme="https"
+      android:host="netfable.github.io/"
       android:pathPrefix="/" />
   </intent-filter>
 <bodys tyle="background-color:black;overflow:hidden;margin:0;display:block;border:0;">
