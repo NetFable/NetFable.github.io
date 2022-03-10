@@ -36,7 +36,7 @@ if(window.matchMedia('(display-mode:standalone)').matches){
   installed='true'
   alert('installed')
   }
-document.onclick = function(clikk){if(installed){deferredPrompt.prompt()}}
+document.onclick = function(clikk){if(!installed){deferredPrompt.prompt()}}
 alert('installed')
   function startup(){}
 </script>
