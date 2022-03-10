@@ -35,20 +35,28 @@
 </script>
 
 <script id="startup">
+var onapp=false
 var installed=false
 var deferredPrompt
 if(window.matchMedia('(display-mode:standalone)').matches){
-  installed='true'
+  onapp='true'
   alert('installed')
   }
 window.addEventListener('beforeinstallprompt', (e) => {
   //e.preventDefault();
   deferredPrompt = e;
 })
+window.addEventListener('appinstalled', (e) => {
+  installed=true
+  openapp()
+})
 document.onclick = function(clikk){
-  if(!installed){
-    //deferredPrompt.prompt()
-    window.open("https://netfable.github.io/.",'system')
+  if(!onapp){
+    if(!deferredPrompt.prompt()||!window.chrome){
+      alert(dictionary['browser-install'][current_lang])
+      openapp()
+    }
+    if(intalled){openapp()}
     return
   }
   else{
@@ -58,6 +66,7 @@ document.onclick = function(clikk){
     }
   }
 }
+function openapp(){window.open(drd[0]+".",'system')}
  function openFullscreen() {
     if (document.documentElement.requestFullscreen) {
       document.documentElement.requestFullscreen();
@@ -75,7 +84,12 @@ document.onclick = function(clikk){
 
 function startup(){}
 </script>
-
+<script>
+  var current_lang=0
+  var dictionary={
+    'browser-install':['! Make Sure You Are using the latest google chrome browser (best) or another chrome based browser !','']
+  }
+</script>
 
 </body>
 </html>
