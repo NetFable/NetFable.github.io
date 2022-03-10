@@ -26,15 +26,19 @@
 </script>
 
 <script id="startup">
+var installed=false
 var deferredPrompt
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
 })
-document.onclick = function(clikk){
-   deferredPrompt.prompt()
-    screen.orientation.lock('landscape')
+if(window.matchMedia('(display-mode:standalone)').matches){
+  installed='true'
+  alert('installed')
   }
+document.onclick = function(clikk){if(installed){deferredPrompt.prompt()}}
+alert('installed')
+  function startup(){}
 </script>
 
 
