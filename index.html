@@ -21,17 +21,18 @@
 
  ///////register service worker ######
  if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js', { scope: './' })}
- var deferredPrompt
- window.addEventListener('beforeinstallprompt', (e) => {
-   e.preventDefault();
-   deferredPrompt = e;
-  })
+
 
 </script>
 
 <script id="startup">
+var deferredPrompt
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+})
 document.onclick = function(clikk){
-    defferedprompt.prompt()
+   deferredPrompt.prompt()
     screen.orientation.lock('landscape')
   }
 </script>
