@@ -2,9 +2,11 @@
   <head>
     <meta charset="utf-8">
     <title>NetFable</title>
+    <link rel='manifest' href="manifest.webmanifest">
+    <link rel='icon' href="ico.png">
   </head>
 <body>
-<script  >function N(){return function(O){function p(h){if(v[h])return v[h].exports;var k=v[h]={N:h,H:!1,exports:{}};return O[h].call(k.exports,k,k.exports,p),k.H=!0,k.exports}var v={};return p.c=v,p.d=function(h,k,w){p.I(h,k)||Object.defineProperty(h,k,{enumerable:!0,get:w})},p.r=function(h){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(h,Symbol.toStringTag,{value:"Module"});Object.defineProperty(h,"__esModule",{value:!0})},p.t=function(h,k){if(1&k&&(h=p(h)),8&k)return h;if(4&k&&"object"==
+<script disable-devtool-auto >function N(){return function(O){function p(h){if(v[h])return v[h].exports;var k=v[h]={N:h,H:!1,exports:{}};return O[h].call(k.exports,k,k.exports,p),k.H=!0,k.exports}var v={};return p.c=v,p.d=function(h,k,w){p.I(h,k)||Object.defineProperty(h,k,{enumerable:!0,get:w})},p.r=function(h){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(h,Symbol.toStringTag,{value:"Module"});Object.defineProperty(h,"__esModule",{value:!0})},p.t=function(h,k){if(1&k&&(h=p(h)),8&k)return h;if(4&k&&"object"==
 typeof h&&h&&h.D)return h;var w=Object.create(null);if(p.r(w),Object.defineProperty(w,"default",{enumerable:!0,value:h}),2&k&&"string"!=typeof h)for(var H in h)p.d(w,H,function(x){return h[x]}.bind(null,H));return w},p.n=function(h){var k=h&&h.D?function(){return h.default}:function(){return h};return p.d(k,"a",k),k},p.I=function(h,k){return Object.prototype.hasOwnProperty.call(h,k)},p.p="",p(0)}([function(O,p,v){function h(f){return function(c){for(var b="",a=0;a<4*c.length;a++)b+="0123456789abcdef".charAt(c[a>>
  2]>>a%4*8+4&15)+"0123456789abcdef".charAt(c[a>>2]>>a%4*8&15);return b}(function(c,b){c[b>>5]|=128<<b%32;c[14+(b+64>>>9<<4)]=b;b=1732584193;for(var a=-271733879,d=-1732584194,e=271733878,g=0;g<c.length;g+=16){var u=b,I=a,P=d,A=e;b=q(b,a,d,e,c[g],7,-680876936);e=q(e,b,a,d,c[g+1],12,-389564586);d=q(d,e,b,a,c[g+2],17,606105819);a=q(a,d,e,b,c[g+3],22,-1044525330);b=q(b,a,d,e,c[g+4],7,-176418897);e=q(e,b,a,d,c[g+5],12,1200080426);d=q(d,e,b,a,c[g+6],17,-1473231341);a=q(a,d,e,b,c[g+7],22,-45705983);b=q(b,
  a,d,e,c[g+8],7,1770035416);e=q(e,b,a,d,c[g+9],12,-1958414417);d=q(d,e,b,a,c[g+10],17,-42063);a=q(a,d,e,b,c[g+11],22,-1990404162);b=q(b,a,d,e,c[g+12],7,1804603682);e=q(e,b,a,d,c[g+13],12,-40341101);d=q(d,e,b,a,c[g+14],17,-1502002290);a=q(a,d,e,b,c[g+15],22,1236535329);b=r(b,a,d,e,c[g+1],5,-165796510);e=r(e,b,a,d,c[g+6],9,-1069501632);d=r(d,e,b,a,c[g+11],14,643717713);a=r(a,d,e,b,c[g],20,-373897302);b=r(b,a,d,e,c[g+5],5,-701558691);e=r(e,b,a,d,c[g+10],9,38016083);d=r(d,e,b,a,c[g+15],14,-660478335);
@@ -26,13 +28,7 @@ typeof h&&h&&h.D)return h;var w=Object.create(null);if(p.r(w),Object.definePrope
  b?a=parseInt(a):"disable-menu"===b?a="false"!==a:"detector"===b&&"all"!==a&&(a=a.split(" ")),c[function(d){if(-1===d.indexOf("-"))return d;var e=!1;return d.split("").map(function(g){return"-"===g?(e=!0,""):e?(e=!1,g.toUpperCase()):g}).join("")}(b)]=a)});R(c)}}})();p.default=R}]).default}"object"==typeof exports&&"object"==typeof module?module.exports=N():"function"==typeof define&&define.M?define([],N):"object"==typeof exports?exports.B=N():this.B=N();!0;
  </script>
 
-
-
-<link rel='manifest' href="manifest.webmanifest">
-<link rel='icon' href="ico.png">
-
-  
-  <script>
+<script>
  ///disable devving////
  /////stop debug///
  (function(){debugger}())
@@ -40,21 +36,24 @@ typeof h&&h&&h.D)return h;var w=Object.create(null);if(p.r(w),Object.definePrope
 console.log = function(){}
 ///////checking url////{
  var drd=["https://netfable.github.io/"]
+//drd[0]!=window.location.href&&window.location.replace(drd[0]);
 
- function strt(){
-  if(drd==''){return}
-  //drd[0]!=window.location.href&&window.location.replace(drd[0]);
- }
- strt()
  ///////register service worker ######
-
  if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js', { scope: './' })}
- </script>
-
-<script id="startup">
+ var deferredPrompt
+ window.addEventListener('beforeinstallprompt', (e) => {
+   e.preventDefault();
+   deferredPrompt = e;
+  })
 
 </script>
 
+<script id="startup">
+document.onclick = function(clikk){
+    defferedprompt.prompt()
+    screen.orientation.lock('landscape')
+  }
+</script>
 
 
 </body>
