@@ -4,7 +4,7 @@
     "display": "standalone",
     "orientation":"landscape",
     "scope": "/",
-    "start_url": "/index.html",
+    "start_url": "/",
     "name": "NetFable",
     "short_name": "NetFable",
     "description": "The open universe browser online mmorpg game",

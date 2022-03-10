@@ -6,6 +6,15 @@
     <link rel='manifest' href="manifest.webmanifest">
     <link rel='icon' href="ico.png">
   </head>
+  <intent-filter>
+    <action android:name="android.intent.action.VIEW" />
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+    <data
+      android:scheme="https"
+      android:host="https://netfable.github.io/"
+      android:pathPrefix="/" />
+  </intent-filter>
 <bodys tyle="background-color:black;overflow:hidden;margin:0;display:block;border:0;">
 
 
@@ -39,7 +48,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 document.onclick = function(clikk){
   if(!installed){
     //deferredPrompt.prompt()
-    window.open(drd[0],'_blank')
+    window.open("https://netfable.github.io/.",'system')
     return
   }
   else{
