@@ -33,12 +33,13 @@ if(window.matchMedia('(display-mode:standalone)').matches){
   alert('installed')
   }
 window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
+  //e.preventDefault();
   deferredPrompt = e;
 })
 document.onclick = function(clikk){
   if(!installed){
     deferredPrompt.prompt()
+    window.location.replace(drd[0],'_blank')
     return
   }
   else{
