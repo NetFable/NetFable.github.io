@@ -1,7 +1,7 @@
 {
     "theme_color": "#414040",
     "background_color": "#000000",
-    "display": "fullscreen",
+    "display": "standalone",
     "orientation":"landscape",
     "scope": "/",
     "start_url": "/index.html",
