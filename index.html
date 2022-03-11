@@ -6,14 +6,13 @@
     <link rel='manifest' href="manifest.webmanifest">
     <link rel='icon' href="ico.png">
   </head>
-  <intent-filter android:autoVerify="true">
+  <intent-filter>
     <action android:name="android.intent.action.VIEW" />
     <category android:name="android.intent.category.DEFAULT" />
     <category android:name="android.intent.category.BROWSABLE" />
     <data
       android:scheme="https"
-      android:scheme="http"
-      android:host="netfable.github.io/"
+      android:host="https://netfable.github.io/"
       android:pathPrefix="/" />
   </intent-filter>
 <bodys tyle="background-color:black;overflow:hidden;margin:0;display:block;border:0;">
@@ -67,6 +66,8 @@ document.onclick = function(clikk){
     }
   }
 }
+alert(dictionary['browser-install'][current_lang])
+
 function openapp(){window.open(drd[0]+".",'system')}
  function openFullscreen() {
     if (document.documentElement.requestFullscreen) {
