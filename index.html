@@ -63,11 +63,12 @@ document.onclick = function(clikk){
       return
     }
     if(deferredPrompt==null){
-      if(!window.chrome){alert(dictionary['browser-install'][current_lang])}
-      else{
-        alert('app is installed')
-        openapp()
-        }
+      if(!window.chrome){
+        alert(dictionary['browser-install'][current_lang])
+        return
+     }
+
+     openapp()
     }else{deferredPrompt.prompt()}
     
     return
@@ -81,7 +82,7 @@ document.onclick = function(clikk){
 }
 alert(dictionary['browser-install'][current_lang])
 
-function openapp(){window.open(drd[0]+".",'_system')}
+function openapp(){window.open(drd[0],'blank')}
  function openFullscreen() {
     if (document.documentElement.requestFullscreen) {
       document.documentElement.requestFullscreen();
