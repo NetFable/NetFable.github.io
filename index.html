@@ -64,7 +64,10 @@ document.onclick = function(clikk){
     }
     if(deferredPrompt==null){
       if(!window.chrome){alert(dictionary['browser-install'][current_lang])}
-      else{openapp()}
+      else{
+        alert('app is installed')
+        openapp()
+        }
     }else{deferredPrompt.prompt()}
     
     return
