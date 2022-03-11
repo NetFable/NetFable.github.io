@@ -6,16 +6,12 @@ const static_assets=[
 './ss.svg',
 './ico.png'
 ]
-// Cache all the files to make a PWA
 self.addEventListener('install',async e => {
     const cache=await caches.open(cacheName)
-    await cache.addAll(static_assets);
+    //await cache.addAll(static_assets);
     })
 
 
-// Our service worker will intercept all fetch requests
-// and check if we have cached the file
-// if so it will serve the cached file
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.open(cacheName)
