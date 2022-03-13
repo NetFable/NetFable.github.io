@@ -116,38 +116,31 @@ window.addEventListener('resize',function(){
  /////loading////
  var loading=true
  const img=new Image()
+ const s=standard/2
  img.src='ss.svg'
- const load_speed=pi*.005
- let load_rate=[0,0]
- let load_rot=0
+ let l_rate=[1,10,.3]
  function loading_(){
   ctx.save()
-  ctx.shadowBlur=10
+  l_rate=interpolate_o(l_rate)
+  ctx.shadowBlur=10+10*l_rate[0]
   ctx.shadowColor='grey'
-  let s=standard/2
   ctx.translate(dimensions[0]/2,dimensions[1]/3)
-  if(load_rate[0]==0){
-   let rf=getRandomInt(10);
-   if(rf==0){rf=1}
-   let t=rf*2
-   if(rf<8){rf=-rf}
-   load_rate=[t,rf]
-  }else[load_rate[0]-=1]
-  load_rot+=load_speed*load_rate[1]
-
-
-  //if(load_rot>=pi*2||load_rot<-pi*2){load_rot=0}
-  ctx.rotate(load_rot)
   ctx.drawImage(img,0-s*.5,0-s*.5,s,s)
-  //ctx.fillStyle='blue'
-
 
   ctx.restore()
  }
  ////Math//////
  function getRandomInt(max) {
   return Math.floor(Math.random() * max);
-}
+ }
+ function interpolate_o([v,l,d]) {
+  if(v>=l||v<=0){d=-d}
+  return([v+d,l,d])
+ }
+ function interpolate_n([v,l,d]) {
+  if(v>=l||v<=-l){d=-d}
+  return([v+d,l,d])
+ }
 
 </script>
 
