@@ -118,7 +118,7 @@ window.addEventListener('resize',function(){
  const img=new Image()
  img.src='ss.svg'
  const load_speed=pi*.1
- function loading(){
+ function loading_(){
    ctx.drawImage(img,CANVAS_WIDTH/2,CANVAS_HEIGHT/2)
    
  }
@@ -187,7 +187,7 @@ function startup(){}
 <script id="update">
   function update(){
     if(loading){
-      loading()
+      loading_()
       return
     }
   }
