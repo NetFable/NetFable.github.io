@@ -113,9 +113,26 @@ window.addEventListener('resize',function(){
  ///////register service worker ######
  if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js', { scope: './' })}
 
+ /////loading////
+ var loading=true
+ const img=new Image()
+ img.src='ss.svg'
+ const load_speed=pi*.1
+ function loading(){
+   ctx.drawImage(img,CANVAS_WIDTH/2,CANVAS_HEIGHT/2)
+   
+ }
 
 </script>
-<script id="'settings">
+
+<script id="'setting">
+
+
+
+
+
+
+
   var current_lang=0
   var dictionary={
     'browser-install':['! Make Sure You Are using the latest google chrome browser (best) or another chrome based browser !','']
@@ -183,6 +200,15 @@ function openapp(){window.open(drd[0],'blank')}
 function startup(){}
 </script>
 
+<script id="update">
+  function update(){
+    if(loading){
+      loading()
+      return
+    }
+  }
+ setInterval(update,65)
+</script>
 
 </body>
 </html>
