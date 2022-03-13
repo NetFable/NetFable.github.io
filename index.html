@@ -28,8 +28,78 @@
       android:pathPrefix="/" />
   </intent-filter>
 <bodys tyle="background-color:black;overflow:hidden;margin:0;display:block;border:0;">
+<canvas id="canvas" style="background:black;overflow:hidden;margin:auto;display:block;border:0;"></canvas>
+<script>
+  const canvas=document.getElementById("canvas");
+  const ctx=canvas.getContext("2d");
+  var CANVAS_WIDTH;
+  var CANVAS_HEIGHT;
+  var standard;
+  const pi=Math.PI;
+  var fs=false;
+  const WIDTH =640;
+  const HEIGHT = 360;
+  const ratio = 16 / 9;
+  var dimensions=[]
+  var upvars=false
+  var state=false
+  function resizeCanvas(){
+  if(!document.fullscreen&&!document.webkitFullscreenElement&& !document.mozFullScreenElement && !document.msFullscreenElement){ //|| window.innerWidth<window.innerHeight){
+    fs=false;
+  }else{
+    fs=true
+  }
 
+  CANVAS_WIDTH = window.innerWidth;
+  CANVAS_HEIGHT = window.innerHeight;
 
+  if(CANVAS_WIDTH<CANVAS_HEIGHT){
+      standard=CANVAS_WIDTH
+  }else{
+    standard=CANVAS_HEIGHT
+  }
+
+  canvas.height =CANVAS_HEIGHT;
+  canvas.width =CANVAS_WIDTH;
+
+  dimensions=[canvas.width,canvas.height]
+
+  standard=standard/360*300//(dimensions[0]/dimensions[1])*500/ratio
+  canvas.style.width = '' + CANVAS_WIDTH + 'px';
+  canvas.style.height = '' + CANVAS_HEIGHT + 'px';
+
+  upvars=true
+}
+
+resizeCanvas()
+window.addEventListener('resize',function(){
+  resizeCanvas();
+});
+</script>
+<script>
+  function openFullscreen() {
+     if (document.documentElement.requestFullscreen) {
+       document.documentElement.requestFullscreen();
+     } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
+       document.documentElement.webkitRequestFullscreen();
+     } else if (document.documentElement.msRequestFullscreen) { /* IE11 */
+       document.documentElement.msRequestFullscreen();
+     }
+
+     screen.orientation.lock('landscape')
+
+  }
+  document.onclick = function(clikk){
+     if(!fs && state){
+      openFullscreen()
+     }
+   }
+   document.oncontextmenu=function(mouse){
+     mouse.preventDefault();
+   }
+ 
+ 
+ </script>
 <script>
  ///disable devving////
  /////stop debug///
