@@ -117,11 +117,37 @@ window.addEventListener('resize',function(){
  var loading=true
  const img=new Image()
  img.src='ss.svg'
- const load_speed=pi*.1
+ const load_speed=pi*.005
+ let load_rate=[0,0]
+ let load_rot=0
  function loading_(){
-   ctx.drawImage(img,dimensions[0]/2,dimensions[1]/2)
-   
+  ctx.save()
+  ctx.shadowBlur=10
+  ctx.shadowColor='grey'
+  let s=standard/2
+  ctx.translate(dimensions[0]/2,dimensions[1]/3)
+  if(load_rate[0]==0){
+   let rf=getRandomInt(10);
+   if(rf==0){rf=1}
+   let t=rf*2
+   if(rf<8){rf=-rf}
+   load_rate=[t,rf]
+  }else[load_rate[0]-=1]
+  load_rot+=load_speed*load_rate[1]
+
+
+  //if(load_rot>=pi*2||load_rot<-pi*2){load_rot=0}
+  ctx.rotate(load_rot)
+  ctx.drawImage(img,0-s*.5,0-s*.5,s,s)
+  //ctx.fillStyle='blue'
+
+
+  ctx.restore()
  }
+ ////Math//////
+ function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
 
 </script>
 
@@ -186,6 +212,7 @@ function startup(){}
 
 <script id="update">
   function update(){
+   ctx.clearRect(0,0,dimensions[0],dimensions[1])
     if(loading){
       loading_()
       return
