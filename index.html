@@ -29,7 +29,7 @@
   </intent-filter>
 <body style="background-color:white;overflow:hidden;margin:0;display:block;border:0;">
 <canvas id="canvas" style="background:black;overflow:hidden;margin:auto;display:block;border:0;;position:absolute;"></canvas>
-<script>
+<script id="canvas settings">
   const canvas=document.getElementById("canvas");
   const ctx=canvas.getContext("2d");
   var CANVAS_WIDTH;
@@ -120,23 +120,53 @@ window.addEventListener('resize',function(){
  const img2=new Image()
  img2.src='sse.png'
 
-
+ let s
  const rotation=pi*.03
  let lrot=0
  let l_rate=[1,10,.3]
-
+ let imgs
 
  function loading_(){
-  const s=standard*.25
-  let lw=[[s*.4,s*.3],[s*.3,s*.2]]
+  if(!imgs){
+    up_imgs()
+    return
+  }
 
   ctx.save()
   l_rate=interpolate_o(l_rate)
-  ctx.shadowBlur=10+10*l_rate[0]
+  //ctx.shadowBlur=10+5*l_rate[0]
+  ctx.shadowBlur=10
   ctx.shadowColor='teal'
-  ctx.translate(dimensions[0]/2,dimensions[1]/2)
-  let as=s+s*.005*l_rate[0]
+  //let as=s+s*.005*l_rate[0]
+  let as=s+s*.05
+  let d=[dimensions[0]/2,dimensions[1]/2]
+  lrot+=rotation
+  ctx.drawImage(imgs[0],0,0)
+  rot_c(d,lrot)
+  ctx.drawImage(imgs[1],0,0)
+  rot_c(d,-2*lrot)
+  ctx.drawImage(imgs[2],0,0)
 
+
+
+
+
+  ctx.restore()
+  //let as=s+s/80*l_rate[0]
+
+
+
+
+
+  
+ }
+function rot_c(d,r){
+  ctx.translate(d[0],d[1])
+  ctx.rotate(r)
+  ctx.translate(-d[0],-d[1])
+}
+
+ function d_arrows(as){
   n_arrow([0,-as*1.3],as,0)
   ctx.rotate(pi)
   n_arrow([0,-as*1.3],as,0)
@@ -144,39 +174,26 @@ window.addEventListener('resize',function(){
   n_arrow([0,-as*1.3],as,0)
   ctx.rotate(pi*3)
   n_arrow([0,-as*1.3],as,0)
-
-  n_circle_fixed([0,0],as,lw[0],0)
+ }
+ function d_bcircle(as,lw){
+  n_circle_fixed([0,0],as,lw,0)
+  d_blocks(as,true)
+ }
+ function d_scircle(as,lw){
   ctx.ashadowColor=0
-  n_circle_fixed([0,0],as/2,lw[1],0)
-
-  ctx.rotate(lrot=lrot+rotation)
-
+  n_circle_fixed([0,0],as/2,lw,0)
+  d_blocks(as,false)
+ }
+ function d_blocks(as,big){
   ctx.rotate(pi*.25)
-  n_line([0,0],as,lw,0)
+  n_line([0,0],as,0,big)
   ctx.rotate(pi*1.5)
-  n_line([0,0],as,lw,0)
+  n_line([0,0],as,0,big)
   ctx.rotate(pi)
-  n_line([0,0],as,lw,0)
+  n_line([0,0],as,0,big)
   ctx.rotate(pi*2.5)
-  n_line([0,0],as,lw,0)
+  n_line([0,0],as,0,big)
   ctx.rotate(0)
-
-
-  ctx.restore()
-
-  //let as=s+s/80*l_rate[0]
-
-  /*ctx.save()
-  ctx.translate(dimensions[0]*.7,dimensions[1]/2)
-  let as2=s*4
-  ctx.drawImage(img,0-as2*.5,0-as2*.5,as2,as2)
-  ctx.drawImage(img2,0-as2*.5,0-as2*.5,as2,as2)
-  ctx.restore()*/
-
-
-
-
-  
  }
  function n_circle_fixed(d,sz,lw,r){
     ctx.save()
@@ -217,22 +234,31 @@ window.addEventListener('resize',function(){
    
    ctx.restore()
   }
-function n_line(d,sz,r){
+function n_line(d,sz,r,big){
    ctx.save()
 
    ctx.translate(d[0],d[1])
    ctx.rotate(r)
 
    ctx.beginPath()
-   ctx.moveTo(0,-sz*.575)
-   ctx.lineTo(0,-sz*.862)
+   if(!big){
+    ctx.moveTo(0,-sz*.575)
+    ctx.lineTo(0,-sz*.65)
+   }else{
+    ctx.moveTo(0,-sz*.862)
+    ctx.lineTo(0,-sz*.79)
+   }
+   
+
+
+
    ctx.closePath()
    //ctx.lineWidth=sz*.3
    //ctx.strokeStyle='white'
    ctx.shadowBlur=0
 
    //ctx.stroke()
-   ctx.lineWidth=sz*.3
+   ctx.lineWidth=sz*.32
    ctx.strokeStyle='black'
    ctx.stroke()
 
@@ -241,6 +267,37 @@ function n_line(d,sz,r){
    ctx.restore()
   }
 
+function up_imgs(){
+ s=standard*.25
+ let lw=[[s*.4,s*.3],[s*.3,s*.2]] 
+ ctx.save()
+ ctx.shadowBlur=10
+ ctx.shadowColor='teal'
+ let d=[dimensions[0]/2,dimensions[1]/2]
+ let as=s+s*.05
+ imgs=[]
+ ctx.translate(d[0],d[1])
+ d_arrows(as)
+ imgs[0]=new Image()
+ imgs[0].src=canvas.toDataURL()
+ cc_c(d)
+ d_bcircle(as,lw[0])
+ imgs[1]=new Image()
+ imgs[1].src=canvas.toDataURL()
+ cc_c(d)
+ d_scircle(as,lw[1])
+ imgs[2]=new Image()
+ imgs[2].src=canvas.toDataURL()
+ cc_c(d)
+
+ ctx.restore()
+
+}
+function cc_c(d){
+  ctx.translate(-d[0],-d[1])
+  c_c()
+  ctx.translate(d[0],d[1])
+}
  ////Math//////
  function getRandomInt(max) {
   return Math.floor(Math.random() * max);
@@ -316,13 +373,19 @@ function startup(){}
 </script>
 
 <script id="update">
+  let upvs=['imgs']
   function update(){
-   ctx.clearRect(0,0,dimensions[0],dimensions[1])
+   if(upvars){
+     upvars=false
+     for(n in upvs){window['up_'+upvs[n]]()}
+    }
+    c_c()
     if(loading){
       loading_()
       return
     }
   }
+  function c_c(){ctx.clearRect(0,0,dimensions[0],dimensions[1])}
  setInterval(update,65)
 </script>
 
