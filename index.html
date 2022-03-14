@@ -115,17 +115,12 @@ window.addEventListener('resize',function(){
 
  /////loading////
  var loading=true
- const img=new Image()
- img.src='se.png'
- const img2=new Image()
- img2.src='sse.png'
 
  let s
  const rotation=pi*.03
  let lrot=0
  let l_rate=[1,10,.3]
  let imgs
-
  function loading_(){
   if(!imgs){
     up_imgs()
@@ -150,16 +145,11 @@ window.addEventListener('resize',function(){
 
 
 
-
   ctx.restore()
   //let as=s+s/80*l_rate[0]
-
-
-
-
-
   
  }
+
 function rot_c(d,r){
   ctx.translate(d[0],d[1])
   ctx.rotate(r)
@@ -239,31 +229,20 @@ function n_line(d,sz,r,big){
 
    ctx.translate(d[0],d[1])
    ctx.rotate(r)
-
+   ctx.shadowBlur=0
    ctx.beginPath()
    if(!big){
-    ctx.moveTo(0,-sz*.575)
+    ctx.moveTo(0,-sz*.5)
     ctx.lineTo(0,-sz*.65)
    }else{
     ctx.moveTo(0,-sz*.862)
     ctx.lineTo(0,-sz*.79)
    }
    
-
-
-
    ctx.closePath()
-   //ctx.lineWidth=sz*.3
-   //ctx.strokeStyle='white'
-   ctx.shadowBlur=0
-
-   //ctx.stroke()
-   ctx.lineWidth=sz*.32
+   ctx.lineWidth=sz*.3
    ctx.strokeStyle='black'
    ctx.stroke()
-
-
-
    ctx.restore()
   }
 
