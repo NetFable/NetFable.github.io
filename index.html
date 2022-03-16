@@ -42,7 +42,7 @@
   const ratio = 16 / 9;
   var dimensions=[]
   var upvars=false
-  var state=false
+  var state
   function resizeCanvas(){
   if(!document.fullscreen&&!document.webkitFullscreenElement&& !document.mozFullScreenElement && !document.msFullscreenElement){ //|| window.innerWidth<window.innerHeight){
     fs=false;
@@ -128,7 +128,7 @@ window.addEventListener('resize',function(){
   }
 
   ctx.save()
-  l_rate=interpolate_o(l_rate)
+  //l_rate=interpolate_o(l_rate)
   //ctx.shadowBlur=10+5*l_rate[0]
   ctx.shadowBlur=10
   ctx.shadowColor='teal'
@@ -138,6 +138,7 @@ window.addEventListener('resize',function(){
   lrot+=rotation
   ctx.drawImage(imgs[0],0,0)
   rot_c(d,lrot)
+  //imgs[1].style.height=standard*7
   ctx.drawImage(imgs[1],0,0)
   rot_c(d,-2*lrot)
   ctx.drawImage(imgs[2],0,0)
@@ -213,9 +214,9 @@ function rot_c(d,r){
    ctx.strokeStyle='white'
    ctx.lineWidth=sz*.1
    ctx.beginPath()
-   ctx.moveTo(0,-sz*.75)
-   ctx.lineTo(-sz*.43,-sz*.03)
-   ctx.lineTo(sz*.43,-sz*.03)
+   ctx.moveTo(0,-sz*.8)
+   ctx.lineTo(-sz*.45,-sz*.1)
+   ctx.lineTo(sz*.45,-sz*.1)
    ctx.closePath()
    ctx.stroke()
    ctx.shadowBlur=0
@@ -235,7 +236,7 @@ function n_line(d,sz,r,big){
     ctx.moveTo(0,-sz*.5)
     ctx.lineTo(0,-sz*.65)
    }else{
-    ctx.moveTo(0,-sz*.862)
+    ctx.moveTo(0,-sz*.9)
     ctx.lineTo(0,-sz*.79)
    }
    
@@ -260,6 +261,7 @@ function up_imgs(){
  imgs[0]=new Image()
  imgs[0].src=canvas.toDataURL()
  cc_c(d)
+ //as=as*1.1
  d_bcircle(as,lw[0])
  imgs[1]=new Image()
  imgs[1].src=canvas.toDataURL()
@@ -276,6 +278,10 @@ function cc_c(d){
   ctx.translate(-d[0],-d[1])
   c_c()
   ctx.translate(d[0],d[1])
+}
+function panel(d,s){
+  ctx.save()
+  ctx.restore()
 }
  ////Math//////
  function getRandomInt(max) {
@@ -299,6 +305,38 @@ function cc_c(d){
   }
 </script>
 <script id="startup">
+  var current='lng_set'
+  var deferredPrompt
+  var l
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+   deferredPrompt = e;
+  })
+
+ function strt_chk(){
+  if(window.matchMedia('(display-mode:standalone)').matches){
+    current="lng_set"
+    return
+  }
+
+  if(!deferredPrompt){}
+
+  window.addEventListener('appinstalled', (e) => {
+    alert('successfully installed!-check your desktop or app menu')
+  })
+
+ }
+ 
+ function lng_set(){
+   if(l=localStorage.getItem('lang')){
+     current='strt_chk'
+     return
+    }
+    if(!l){current='l_chse'}
+  }
+  function l_chse(){
+    //ctx.
+  }
   /*
 var onapp=false
 var installed=false
@@ -359,9 +397,9 @@ function startup(){}
      for(n in upvs){window['up_'+upvs[n]]()}
     }
     c_c()
+    window[current]()
     if(loading){
       loading_()
-      return
     }
   }
   function c_c(){ctx.clearRect(0,0,dimensions[0],dimensions[1])}
