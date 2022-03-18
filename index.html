@@ -214,9 +214,9 @@ function rot_c(d,r){
    ctx.strokeStyle='white'
    ctx.lineWidth=sz*.1
    ctx.beginPath()
-   ctx.moveTo(0,-sz*.8)
-   ctx.lineTo(-sz*.45,-sz*.1)
-   ctx.lineTo(sz*.45,-sz*.1)
+   ctx.moveTo(0,-sz*.75)
+   ctx.lineTo(-sz*.43,-sz*.03)
+   ctx.lineTo(sz*.43,-sz*.03)
    ctx.closePath()
    ctx.stroke()
    ctx.shadowBlur=0
@@ -261,7 +261,6 @@ function up_imgs(){
  imgs[0]=new Image()
  imgs[0].src=canvas.toDataURL()
  cc_c(d)
- //as=as*1.1
  d_bcircle(as,lw[0])
  imgs[1]=new Image()
  imgs[1].src=canvas.toDataURL()
@@ -269,6 +268,12 @@ function up_imgs(){
  d_scircle(as,lw[1])
  imgs[2]=new Image()
  imgs[2].src=canvas.toDataURL()
+ cc_c(d)
+ d_arrows(as)
+ d_bcircle(as,lw[0])
+ d_scircle(as,lw[1])
+ imgs[3]=new Image()
+ imgs[3].src=canvas.toDataURL()
  cc_c(d)
 
  ctx.restore()
@@ -279,10 +284,7 @@ function cc_c(d){
   c_c()
   ctx.translate(d[0],d[1])
 }
-function panel(d,s){
-  ctx.save()
-  ctx.restore()
-}
+
  ////Math//////
  function getRandomInt(max) {
   return Math.floor(Math.random() * max);
@@ -332,11 +334,14 @@ function panel(d,s){
      current='strt_chk'
      return
     }
-    if(!l){current='l_chse'}
+    if(!l){
+     loading=false
+     ui_s=true
+     current=false
+    }
   }
-  function l_chse(){
-    //ctx.
-  }
+  
+
   /*
 var onapp=false
 var installed=false
@@ -388,19 +393,60 @@ function openapp(){window.open(drd[0],'blank')}
 function startup(){}
 */
 </script>
+<script id='fetcher'>
+
+</script>
+
+<script id='ui'>
+  let ui_c='l_chse'
+  function ui(){window[ui_c]()}
+
+  
+  function l_chse(){
+   let cp_s=standard*.02
+   cp[0]=[cp_s,cp_s,dimensions[0]-cp_s*2,dimensions[1]-cp_s*2]
+   cpf()
+  }
+
+
+
+
+  var cp=[[],false]//rectsize,icon
+  function cpf(){
+    ctx.save()
+    ctx.fillStyle='black'
+    ctx.strokeStyle='white'
+    ctx.fillRect(cp[0][0],cp[0][1],cp[0][2],cp[0][3])
+    ctx.strokeRect(cp[0][0],cp[0][1],cp[0][2],cp[0][3])
+    ctx.restore()
+    d_logo(imgs[3],[dimensions[0]/2,dimensions[1]/2],standard*.8,.05)
+    if(cp[1]){d_logo(cp[1],[dimensions[0]/2,dimensions[1]/2],standard*.8,.05)}
+  }
+  function d_logo(i,d,s,a){
+    ctx.save()
+    s=[s/(d[1]/d[0]),s]
+    ctx.globalAlpha=a
+    ctx.drawImage(i,d[0]-s[0]/2,d[1]-s[1]/2,s[0],s[1])
+    ctx.restore()
+  }
+</script>
+
+<script id='control'></script>
+
+<script id='current'> </script>
 
 <script id="update">
   let upvs=['imgs']
+  var ui_s=false
   function update(){
    if(upvars){
-     upvars=false
      for(n in upvs){window['up_'+upvs[n]]()}
+     upvars=false
     }
     c_c()
-    window[current]()
-    if(loading){
-      loading_()
-    }
+    if(current){window[current]()}
+    if(ui_s){ui()}
+    if(loading){loading_()}
   }
   function c_c(){ctx.clearRect(0,0,dimensions[0],dimensions[1])}
  setInterval(update,65)
