@@ -365,8 +365,8 @@ function cc_c(d){
     }
     if(!l){
      //loading=false
-     //ui_s=true
-     //current=false
+     ui_s=true
+     current=false
     }
   }
   
@@ -425,14 +425,14 @@ function startup(){}
 
 <script id='fetcher'>
 g_r={}
-var res=''
 let ds=begone('24z11h8e4217n381d28t8e4217n381d28t7\\14p32(40s0o184f8:26t168o46/41-27/35~14a8p385p1444a16p26&29i7\\14.26j3948s3g6v48i26&29t12i69o18h35~14u1o224f4133f45b26j3948s3.12i69o18c34d3638r1344i113v2442e25o3d812r2820o1420p4912b4721o3748x17m0o184f8/14@27g34d3638r1344i113v2442e25i37<28s10`17t47&28&7s3d812r2820o1420p4912b4721o3748x17/')
 function get(n){
   fetch(ds+queue[n][0])
   .then((response) =>response.json())
-  .then ((data) => {if(data.files){queue[n][1]=data.files;}else{queue[n][2]='err'}})
-  .catch((error) => {queue[n][2]='err'})
+  .then ((data) => {if(data.files){qres(n,1,data.files);}else{qres(n,2,'err')}})
+  .catch((error) => {qres(n,2,'err')})
 }
+function qres(n,nn,v){if(queue[n]){queue[n][nn]=v;}}
 function parse(s){
  return JSON.parse(s);
 }
@@ -450,13 +450,14 @@ function parse(s){
 
   function uidown(v){
     av_l=parse(v.l.content)
-    cp[1]=v.l_ico.content
+    cp[1]=new Image()
+    cp[1].src=v.l_ico.content
     console.log(v)
 
   }
   
   function l_chse(){
-   if(av_l){return}
+   if(!av_l){return}
    let cp_s=standard*.02
    cp[0]=[cp_s,cp_s,dimensions[0]-cp_s*2,dimensions[1]-cp_s*2]
    cpf()
@@ -472,12 +473,12 @@ function parse(s){
     ctx.fillRect(cp[0][0],cp[0][1],cp[0][2],cp[0][3])
     ctx.strokeRect(cp[0][0],cp[0][1],cp[0][2],cp[0][3])
     ctx.restore()
-    d_logo(imgs[3],[dimensions[0]/2,dimensions[1]/2],standard*.8,.05)
-    if(cp[1]){d_logo(cp[1],[dimensions[0]/2,dimensions[1]/2],standard*.8,.05)}
+    d_logo(imgs[3],[dimensions[0]/2,dimensions[1]/2],standard*.8,.5,true)
+    if(cp[1]){d_logo(cp[1],[dimensions[0]/2,dimensions[1]/2],standard*.5,.5)}
   }
-  function d_logo(i,d,s,a){
+  function d_logo(i,d,s,a,islogo){
     ctx.save()
-    s=[s/(d[1]/d[0]),s]
+    if(islogo){s=[s/(d[1]/d[0]),s]}else{s=[s,s]}
     ctx.globalAlpha=a
     ctx.drawImage(i,d[0]-s[0]/2,d[1]-s[1]/2,s[0],s[1])
     ctx.restore()
