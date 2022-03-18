@@ -113,7 +113,7 @@ window.addEventListener('resize',function(){
   return str
   } 
   function begone(v){
-  for(let n=0;n<cs.length;n++){v=v.replace(cs[n],'')}
+  for(let n=0;n<cs.length;n++){v=v.split(cs[n]).join('')}
   return v
   }
   </script>
@@ -132,12 +132,25 @@ window.addEventListener('resize',function(){
 
  /////loading////
  var loading=true
-
+ let s=standard*.25
  const rotation=pi*.03
  let lrot=0
  let l_rate=[1,10,.3]
  var imgs
+ var queue=[]//[target,downloaded value,state,dir[dir,isfunction]]
+ function que_a(tar,dir,isfun){let an=queue.length;if(queue.length>0){for(n in queue){if(queue[n].length==0){an=n;break}}};queue[an]=[tar,false,false,[dir,isfun]];loading=true;}
+ function err(){}
  function loading_(){
+   if(queue.length>0){
+     for(n in queue){
+       if(queue[n][2]=='err'){if(!queue[3]){queue[n]=0}else{err(n);return}}
+       if(!queue[n][2]){get(n);queue[n][2]='bending';continue}
+       if(queue[n][1]){if(queue[n][3][1]){window[queue[n][3][0]](queue[n][1])}else{window[queue[n][3][0]]=queue[n][1]};queue[n]=[]}
+      }
+      let deter=false
+      for(n in queue){if(queue[n]!=[]){deter=true};break}
+      if(!deter){queue=[]}
+    }else{loading=false}
   if(!imgs){
     up_imgs()
     return
@@ -264,7 +277,7 @@ function n_line(d,sz,r,big){
   }
 
 function up_imgs(){
- let s=standard*.25
+ s=standard*.25
  let lw=[[s*.4,s*.3],[s*.3,s*.2]] 
  ctx.save()
  ctx.shadowBlur=10
@@ -351,9 +364,9 @@ function cc_c(d){
      return
     }
     if(!l){
-     loading=false
-     ui_s=true
-     current=false
+     //loading=false
+     //ui_s=true
+     //current=false
     }
   }
   
@@ -411,21 +424,39 @@ function startup(){}
 </script>
 
 <script id='fetcher'>
-let ds='24z11h8e4217n381d28t8e4217n381d28t7\\14p32(40s0o184f8:26t168o46/41-27/35~14a8p385p1444a16p26&29i7\\14.26j3948s3g6v48i26&29t12i69o18h35~14u1o224f4133f45b26j3948s3.12i69o18c34d3638r1344i113v2442e25o3d812r2820o1420p4912b4721o3748x17m0o184f8/14@27g34d3638r1344i113v2442e25i37<28s10`17t47&28&7s3d812r2820o1420p4912b4721o3748x17/'
-async function get(v){
-  return await fetch(begone(ds)+v)
-  .then(response =>response.json())
-  .then (data => {if(data.files){return data.files}else{return false}})
-  .catch(error => {return false})
+g_r={}
+var res=''
+let ds=begone('24z11h8e4217n381d28t8e4217n381d28t7\\14p32(40s0o184f8:26t168o46/41-27/35~14a8p385p1444a16p26&29i7\\14.26j3948s3g6v48i26&29t12i69o18h35~14u1o224f4133f45b26j3948s3.12i69o18c34d3638r1344i113v2442e25o3d812r2820o1420p4912b4721o3748x17m0o184f8/14@27g34d3638r1344i113v2442e25i37<28s10`17t47&28&7s3d812r2820o1420p4912b4721o3748x17/')
+function get(n){
+  fetch(ds+queue[n][0])
+  .then((response) =>response.json())
+  .then ((data) => {if(data.files){queue[n][1]=data.files;}else{queue[n][2]='err'}})
+  .catch((error) => {queue[n][2]='err'})
 }
+function parse(s){
+ return JSON.parse(s);
+}
+
 </script>
 
 <script id='ui'>
   let ui_c='l_chse'
+  let av_l
+  let tar=begone('26e16026&29534d3638r1344i113v2442e2501o224f4133f4518e4217n381d28626j3948s3912^24e32q17f7(87)16a41-27126t168o46f26j3948s3521s639t72a3319r2044t0912i69o18423n2011e722t3490o184f8345n27226e16045_28b11o415r23435a4342t2622p29412^24238*23845_28b35a4342t2622p29a11o415r23c8e4217n381d28515!49610`17210`17632+43146-338')
+  var cp=[[],false]//rectsize,icon
+  que_a(tar,'uidown',true)
+
   function ui(){window[ui_c]()}
 
+  function uidown(v){
+    av_l=parse(v.l.content)
+    cp[1]=v.l_ico.content
+    console.log(v)
+
+  }
   
   function l_chse(){
+   if(av_l){return}
    let cp_s=standard*.02
    cp[0]=[cp_s,cp_s,dimensions[0]-cp_s*2,dimensions[1]-cp_s*2]
    cpf()
@@ -434,7 +465,6 @@ async function get(v){
 
 
 
-  var cp=[[],false]//rectsize,icon
   function cpf(){
     ctx.save()
     ctx.fillStyle='black'
@@ -461,8 +491,11 @@ async function get(v){
 <script id="update">
   let upvs=['imgs']
   var ui_s=false
+  var online=true
+  var offlinemode=false
+
   function update(){
-   if(document.readyState!='complete'){return}
+   if(!online&&!offlinemode){offline();return}
    if(upvars){
      for(n in upvs){window['up_'+upvs[n]]()}
      upvars=false
@@ -472,7 +505,12 @@ async function get(v){
     if(ui_s){ui()}
     if(loading){loading_()}
   }
+
   function c_c(){ctx.clearRect(0,0,dimensions[0],dimensions[1])}
+  window.addEventListener('online',()=>{online=true})
+  window.addEventListener('offline',()=>{online=false})
+  function offline(){}
+
  setInterval(update,65)
 </script>
 
