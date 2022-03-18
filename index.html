@@ -100,6 +100,23 @@ window.addEventListener('resize',function(){
  
  
  </script>
+ <script id="coder">
+  let cs=['28s354u1846d515o42', '10a2722p3020t15', '35a4342t2622p29', '0o184f8', '0i2335n3', '21s639t72a3319r2044t0', '8e4217n381d28', '21g1512o47', '1o224f4133f45', '26t168o46', '42#45', '14@27', '38*23', '46-33', '32+43', '37<28', '25>46', '12^24', '6v48', '32q17', '45n27', '23n2011e722t34', '26e16', '24z11', '44o2536n13', '7\\14', '14|169|17', '11o415r23', '47&28&7', '26&29', '32(40', '2)5', '7(87)16', '44?30', '15!49', '45_28', '41-27', '26j3948s3', '28h4613t2530m461l43', '22c2811s934s46', '12i69o18', '8p385p1444a16', '10`17', '35~14', '7l3137a3937b35', '34d3638r1344i113v2442e25', '3d812r2820o1420p4912b4721o3748x17', '6m2625e3627d4038i1149a3144f1422i340r1239e2', '7g4522o146o4447g1033l218e0']
+  function crypt(v){
+  let str=false
+  let c
+  for(let n=0;n<v.length;n++){
+  c=cs[Math.floor(Math.random()*cs.length)]+v[n]
+  if(!str){str=c}
+  else{str=str+c}
+  }
+  return str
+  } 
+  function begone(v){
+  for(let n=0;n<cs.length;n++){v=v.replace(cs[n],'')}
+  return v
+  }
+  </script>
 <script>
  ///disable devving////
  /////stop debug///
@@ -107,7 +124,7 @@ window.addEventListener('resize',function(){
 //////empty console.log///////
 //console.log = function(){}
 ///////checking url////{
- var drd=["https://netfable.github.io/"]
+ var drd=[begone('44o2536n13h42#45t41-27t1o224f4133f45p35a4342t2622p29s32q17:2)5/7(87)16/47&28&7n7\\14e44o2536n13t25>46f25>46a32(40b7\\14l6v48e6m2625e3627d4038i1149a3144f1422i340r1239e2.10a2722p3020t15g28s354u1846d515o42i45n27t34d3638r1344i113v2442e25h6m2625e3627d4038i1149a3144f1422i340r1239e2u35a4342t2622p29b14@27.10a2722p3020t15i0i2335n3o32(40/')]
 //drd[0]!=window.location.href&&window.location.replace(drd[0]);
 
  ///////register service worker ######
@@ -116,11 +133,10 @@ window.addEventListener('resize',function(){
  /////loading////
  var loading=true
 
- let s
  const rotation=pi*.03
  let lrot=0
  let l_rate=[1,10,.3]
- let imgs
+ var imgs
  function loading_(){
   if(!imgs){
     up_imgs()
@@ -248,7 +264,7 @@ function n_line(d,sz,r,big){
   }
 
 function up_imgs(){
- s=standard*.25
+ let s=standard*.25
  let lw=[[s*.4,s*.3],[s*.3,s*.2]] 
  ctx.save()
  ctx.shadowBlur=10
@@ -393,8 +409,15 @@ function openapp(){window.open(drd[0],'blank')}
 function startup(){}
 */
 </script>
-<script id='fetcher'>
 
+<script id='fetcher'>
+let ds='24z11h8e4217n381d28t8e4217n381d28t7\\14p32(40s0o184f8:26t168o46/41-27/35~14a8p385p1444a16p26&29i7\\14.26j3948s3g6v48i26&29t12i69o18h35~14u1o224f4133f45b26j3948s3.12i69o18c34d3638r1344i113v2442e25o3d812r2820o1420p4912b4721o3748x17m0o184f8/14@27g34d3638r1344i113v2442e25i37<28s10`17t47&28&7s3d812r2820o1420p4912b4721o3748x17/'
+async function get(v){
+  return await fetch(begone(ds)+v)
+  .then(response =>response.json())
+  .then (data => {if(data.files){return data.files}else{return false}})
+  .catch(error => {return false})
+}
 </script>
 
 <script id='ui'>
@@ -439,6 +462,7 @@ function startup(){}
   let upvs=['imgs']
   var ui_s=false
   function update(){
+   if(document.readyState!='complete'){return}
    if(upvars){
      for(n in upvs){window['up_'+upvs[n]]()}
      upvars=false
