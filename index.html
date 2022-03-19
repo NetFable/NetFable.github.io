@@ -433,31 +433,42 @@ function get(n){
   .catch((error) => {qres(n,2,'err')})
 }
 function qres(n,nn,v){if(queue[n]){queue[n][nn]=v;}}
-function parse(s){
- return JSON.parse(s);
-}
+function parse(s){return JSON.parse(s);}
+function stringify(s){return JSON.stringify(s)}
+
 
 </script>
 
 <script id='ui'>
   let ui_c='l_chse'
-  let av_l
+  let av_l=parse(localStorage.getItem('av_l'))
   let tar=begone('26e16026&29534d3638r1344i113v2442e2501o224f4133f4518e4217n381d28626j3948s3912^24e32q17f7(87)16a41-27126t168o46f26j3948s3521s639t72a3319r2044t0912i69o18423n2011e722t3490o184f8345n27226e16045_28b11o415r23435a4342t2622p29412^24238*23845_28b35a4342t2622p29a11o415r23c8e4217n381d28515!49610`17210`17632+43146-338')
   var cp=[[],false]//rectsize,icon
-  que_a(tar,'uidown',true)
-
+  let c=localStorage.getItem('l_ico')
+  let dict=parse(localStorage.getItem('dict'))
+  if(av_l&&c&&dict){cp[1]=new Image();cp[1].src=c}else{que_a(tar,'uidown',true)}
+  
+  
   function ui(){window[ui_c]()}
-
+  
+  let options=[]
   function uidown(v){
     av_l=parse(v.l.content)
+    dict=parse(v.dict.content)
     cp[1]=new Image()
     cp[1].src=v.l_ico.content
-    console.log(v)
+    localStorage.setItem('av_l',stringify(av_l));
+    localStorage.setItem('l_ico',cp[1].src);
+    localStorage.setItem('dict',stringify(dict));
 
   }
-  
+  function sopt(){
+    options[0]='en'
+    for(n in navigator.languages){let l_=navigator.languages[n].substring(0,2).toLowerCase();if(options.indexOf(l_)==-1){options[options.length]=l_}}
+  }
   function l_chse(){
-   if(!av_l){return}
+   if(!av_l||loading){return}
+   if(options.length==0){sopt()}
    let cp_s=standard*.02
    cp[0]=[cp_s,cp_s,dimensions[0]-cp_s*2,dimensions[1]-cp_s*2]
    cpf()
@@ -473,8 +484,8 @@ function parse(s){
     ctx.fillRect(cp[0][0],cp[0][1],cp[0][2],cp[0][3])
     ctx.strokeRect(cp[0][0],cp[0][1],cp[0][2],cp[0][3])
     ctx.restore()
-    d_logo(imgs[3],[dimensions[0]/2,dimensions[1]/2],standard*.8,.5,true)
-    if(cp[1]){d_logo(cp[1],[dimensions[0]/2,dimensions[1]/2],standard*.5,.5)}
+    //d_logo(imgs[3],[dimensions[0]/2,dimensions[1]/2],standard*.8,.2,true)
+    if(cp[1]){d_logo(cp[1],[dimensions[0]/2,dimensions[1]/2],standard*.5,1)}
   }
   function d_logo(i,d,s,a,islogo){
     ctx.save()
