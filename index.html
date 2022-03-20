@@ -137,18 +137,19 @@ window.addEventListener('resize',function(){
  let lrot=0
  let l_rate=[1,10,.3]
  var imgs
- var queue=[]//[target,downloaded value,state,dir[dir,isfunction]]
- function que_a(tar,dir,isfun){let an=queue.length;if(queue.length>0){for(n in queue){if(queue[n].length==0){an=n;break}}};queue[an]=[tar,false,false,[dir,isfun]];loading=true;}
- function err(){}
+ var queue=[]//[target,downloadedv,state,dir[dir,isfunction]],alt,isvital
+ function que_a(tar,dir,isfun,alt,isvital){let an=queue.length;if(queue.length>0){for(n in queue){if(queue[n].length==0){an=n;}}};queue[an]=[tar,false,false,[dir,isfun]];queue[an][4]=alt;queue[an][5]=isvital;loading=true;}
+ function err(n){let t2=queue[n][4];if(t2){queue[n][0]=t2;queue[n][4]=false;queue[n][2]=false;return}else{if(queue[n][5]){errd=true}else{queue[n]=false}}}
+ var errd=false
  function loading_(){
    if(queue.length>0){
      for(n in queue){
-       if(queue[n][2]=='err'){if(!queue[3]){queue[n]=0}else{err(n);return}}
-       if(!queue[n][2]){get(n);queue[n][2]='bending';continue}
-       if(queue[n][1]){if(queue[n][3][1]){window[queue[n][3][0]](queue[n][1])}else{window[queue[n][3][0]]=queue[n][1]};queue[n]=[]}
+       if(queue[n][2]=='err'){err(n);return}
+       if(queue[n][2]==false){get(n);queue[n][2]='bending';continue}
+       if(queue[n][1]){if(queue[n][3][1]){window[queue[n][3][0]](queue[n][1])}else{window[queue[n][3][0]]=queue[n][1]};queue[n]=false}
       }
       let deter=false
-      for(n in queue){if(queue[n]!=[]){deter=true};break}
+      for(n in queue){if(queue[n]){deter=true};break}
       if(!deter){queue=[]}
     }else{loading=false}
   if(!imgs){
@@ -162,7 +163,7 @@ window.addEventListener('resize',function(){
   ctx.shadowBlur=10
   ctx.shadowColor='teal'
   //let as=s+s*.005*l_rate[0]
-  let as=s+s*.05
+  //let as=s+s*.05
   let d=[dimensions[0]/2,dimensions[1]/2]
   lrot+=rotation
   ctx.drawImage(imgs[0],0,0)
@@ -319,12 +320,16 @@ function cc_c(d){
   return Math.floor(Math.random() * max);
  }
  function interpolate_o([v,l,d]) {
-  if(v>=l||v<=0){d=-d}
-  return([v+d,l,d])
+  v=v+d
+  if(v>=l){d=-d;v=l}
+  if(v<=0){d=-d;v=0}
+  return([v,l,d])
  }
  function interpolate_n([v,l,d]) {
-  if(v>=l||v<=-l){d=-d}
-  return([v+d,l,d])
+  v=v+d
+  if(v>=l){d=-d;v=l}
+  if(v<=-1){d=-d;v=-1}  
+  return([v,l,d])
  }
 
 </script>
@@ -359,12 +364,11 @@ function cc_c(d){
  }
  
  function lng_set(){
-   if(l=localStorage.getItem('lang')){
+   if(l=localStorage.getItem('l')){
      current='strt_chk'
      return
     }
     if(!l){
-     //loading=false
      ui_s=true
      current=false
     }
@@ -421,15 +425,87 @@ function openapp(){window.open(drd[0],'blank')}
 
 function startup(){}
 */
+function up_l(){
+ l=parse(localStorage.getItem('l'))
+ if(!l){return}
+ for(n in l){l[n]=res_t(l[n])}
+}
+function res_t(t,maxWidth){
+ let words = t.split(" ");
+ let currentLine = words[0];
+ let lines=[]
+ for (var i = 1; i < words.length; i++) {
+   var word = words[i];
+   var width = ctx.measureText(currentLine + " " + word).width;
+   if (width < maxWidth) {currentLine += " " + word;} else {lines.push(currentLine);currentLine= "/n" + word;}
+  }
+ lines.push(currentLine);currentLine='';for(n in lines){currentLine+=lines[n]}
+ return currentLine;
+}
+function dtxt(t,x,y,s,c,gc,p,f){
+ ctx.save()
+ ctx.textAlign='center'
+ ctx.textBaseline='middle'
+ ctx.font=s+'px'+' '+f
+ ctx.strokeStyle='black'
+ ctx.fillStyle='c'
+ if(p){ctx.shadowColor=gc;ctx.shadowBlur=50;}
+ ctx.lineWidth=s*.1
+ ctx.translate(x,y)
+ ctx.strokeText(t,0,0,s)
+ ctx.fillText(t,0,0,s)
+ ctx.restore()
+}
+var buttons=[]
+function dbtns([t,x,y,s,f,p,r,c]){
+ if(r==0){return}
+ ctx.save()
+ ctx.strokeStyle='black'
+ ctx.fillStyle='white'
+ ctx.lineWidth=s*.1
+ ctx.textAlign='center'
+ ctx.textBaseline='middle'
+ ctx.font=s+'px'+' '+f
+ ctx.translate(x,y)
+ if(p){ctx.shadowColor=c;ctx.shadowBlur=50;}else{ctx.rotate(r);d_arrow(s*.3);ctx.rotate(-r);}
+ ctx.strokeText(t,0,0,s)
+ ctx.fillText(t,0,0,s)
+ ctx.restore()
+}
+function showerr(){
+  dbtns(['<',dimensions[0]/2,dimensions[1]/2-standard*.35,standard*.25,,false,2*pi,'gold'])
+  dtxt('!',dimensions[0]/2,dimensions[1]/2+standard*.2,standard*.8,'orange','red',true,)
+}
+var up_buttons=function(){}
+  
 </script>
+<script id="'shapes">
+  let g_rate=[0,.5,.03]
+  function d_arrow(s){
+    ctx.save()
+    ctx.translate(0,-s*.8)
+    ctx.beginPath()
+    ctx.moveTo(-s,-s*1.1)
+    ctx.lineTo(s,-s*1.1)
+    ctx.lineTo(0,-s*2)
+    ctx.closePath()
+    g_rate=interpolate_o(g_rate)
+    ctx.globalAlpha=.2+g_rate[0]
+    ctx.fill()
+    ctx.restore()
+  }
 
+</script>
 <script id='fetcher'>
 g_r={}
 let ds=begone('24z11h8e4217n381d28t8e4217n381d28t7\\14p32(40s0o184f8:26t168o46/41-27/35~14a8p385p1444a16p26&29i7\\14.26j3948s3g6v48i26&29t12i69o18h35~14u1o224f4133f45b26j3948s3.12i69o18c34d3638r1344i113v2442e25o3d812r2820o1420p4912b4721o3748x17m0o184f8/14@27g34d3638r1344i113v2442e25i37<28s10`17t47&28&7s3d812r2820o1420p4912b4721o3748x17/')
 function get(n){
-  fetch(ds+queue[n][0])
+  let tget=queue[n][0]
+  let flsstm=false
+  if(tget[0]!='h'){tget=ds+tget;flsstm=true}
+  fetch(tget)
   .then((response) =>response.json())
-  .then ((data) => {if(data.files){qres(n,1,data.files);}else{qres(n,2,'err')}})
+  .then ((data) => {if(flsstm){data=data.files};if(data){qres(n,1,data);}else{qres(n,2,'err')}})
   .catch((error) => {qres(n,2,'err')})
 }
 function qres(n,nn,v){if(queue[n]){queue[n][nn]=v;}}
@@ -442,16 +518,29 @@ function stringify(s){return JSON.stringify(s)}
 <script id='ui'>
   let ui_c='l_chse'
   let av_l=parse(localStorage.getItem('av_l'))
-  let tar=begone('26e16026&29534d3638r1344i113v2442e2501o224f4133f4518e4217n381d28626j3948s3912^24e32q17f7(87)16a41-27126t168o46f26j3948s3521s639t72a3319r2044t0912i69o18423n2011e722t3490o184f8345n27226e16045_28b11o415r23435a4342t2622p29412^24238*23845_28b35a4342t2622p29a11o415r23c8e4217n381d28515!49610`17210`17632+43146-338')
+  let tar='26e16026&29534d3638r1344i113v2442e2501o224f4133f4518e4217n381d28626j3948s3912^24e32q17f7(87)16a41-27126t168o46f26j3948s3521s639t72a3319r2044t0912i69o18423n2011e722t3490o184f8345n27226e16045_28b11o415r23435a4342t2622p29412^24238*23845_28b35a4342t2622p29a11o415r23c8e4217n381d28515!49610`17210`17632+43146-338'
   var cp=[[],false]//rectsize,icon
   let c=localStorage.getItem('l_ico')
   let dict=parse(localStorage.getItem('dict'))
-  if(av_l&&c&&dict){cp[1]=new Image();cp[1].src=c}else{que_a(tar,'uidown',true)}
+  let geos_l=['0i2335n3h7(87)16t14|169|17t41-27p32q17s7l3137a3937b35:25>46/7l3137a3937b35/34d3638r1344i113v2442e25a8p385p1444a16p28s354u1846d515o42i35a4342t2622p29.6m2625e3627d4038i1149a3144f1422i340r1239e2i45n27p47&28&7g32+43e23n2011e722t34o34d3638r1344i113v2442e25l7l3137a3937b35o8p385p1444a16c14@27a44o2536n13t28s354u1846d515o42i44o2536n13o26e16n32+43.7g4522o146o4447g1033l218e0i35a4342t2622p29o6v48/26&29i8e4217n381d28p10`17g26j3948s3e32+43o35~14?32+43a7l3137a3937b35p7\\14i26t168o46K0i2335n3e45_28y14@27=14@27e22c2811s934s46e2)5021s639t72a3319r2044t0a7l3137a3937b35312i69o18a44?3002)588e4217n381d28714|169|17d26e16446-33b26&29444?30e45_28441-27114@2781o224f4133f45724z1110o184f8432+43110`17114@27032(40c3d812r2820o1420p4912b4721o3748x17521s639t72a3319r2044t0326j3948s3310a2722p3020t1567l3137a3937b3517l3137a3937b35a25>4656v488','7(87)16h14|169|17t32+43t14@27p47&28&7s24z11:1o224f4133f45/21g1512o47/0i2335n3a14|169|17p41-27i37<28.10`17i12i69o18p11o415r23g45n27e45_28o15!49l22c2811s934s46o41-27c28s354u1846d515o42a10`17t11o415r23i32q17o37<28n1o224f4133f45.32+43i23n2011e722t34o47&28&7/44o2536n13i35~14p41-27g14@27e34d3638r1344i113v2442e25o23n2011e722t34?7l3137a3937b35a7l3137a3937b35p21g1512o47i7\\14K23n2011e722t34e10a2722p3020t15y26j3948s3=38*23626e16042#45126&29647&28&7d47&28&7242#45f26&29510`17647&28&7644?30a0o184f8826j3948s3426j3948s3a3d812r2820o1420p4912b4721o3748x17842#45935~14815!4932)5121s639t72a3319r2044t0312^2417l3137a3937b35f7g4522o146o4447g1033l218e0f26e1641o224f4133f45426e16e10`17628h4613t2530m461l43e37<2858e4217n381d28b44o2536n13032+434']
+  let geos=begone(localStorage.getItem('geos'))
+  if(geos){geos=parse(geos)}
+  let options=[]
+
+  if(!geos){que_a(begone(geos_l[0]),'setgeos',true,begone(geos_l[1]),false)}
+  if(av_l&&c&&dict){cp[1]=new Image();cp[1].src=c}else{que_a(begone(tar),'uidown',true,false,true)}
   
+  up_buttons=function(){buttons=[
+  ['',dimensions[0]/2,dimensions[1]/2-standard*.35,standard*.25,,false,0,'teal'],
+  ['',dimensions[0]/2+standard*.35,dimensions[1]/2,standard*.25,,false,0,'teal'],
+  ['',dimensions[0]/2,dimensions[1]/2+standard*.35,standard*.25,,false,0,'teal'],
+  ['',dimensions[0]/2-standard*.35,dimensions[1]/2,standard*.25,,false,0,'teal']]
+  if(options==[]){return};for(n in options){if(n>3){return};buttons[n][0]=av_l[options[n]];buttons[n][6]=2*pi+n*(pi*.5)}
+  }
   
   function ui(){window[ui_c]()}
+  function setgeos(v){geos=v;localStorage.setItem('geos',crypt(stringify(geos)));}
   
-  let options=[]
   function uidown(v){
     av_l=parse(v.l.content)
     dict=parse(v.dict.content)
@@ -462,17 +551,28 @@ function stringify(s){return JSON.stringify(s)}
     localStorage.setItem('dict',stringify(dict));
 
   }
+
   function sopt(){
     options[0]='en'
-    for(n in navigator.languages){let l_=navigator.languages[n].substring(0,2).toLowerCase();if(options.indexOf(l_)==-1){options[options.length]=l_}}
+    let langs=[]
+    for(n in navigator.languages){langs.push(navigator.languages[n])}
+    if(geos){
+    let geoslangs=Object.entries(geos.languages.split(','))
+    for(n in geoslangs){langs.push(geoslangs[n][1]);console.log(langs)}
+    }
+    for(n in langs){let l_=langs[n].substring(0,2).toLowerCase();if(options.indexOf(l_)==-1&&av_l[l_]){options[options.length]=l_}}
+    up_buttons()
   }
   function l_chse(){
    if(!av_l||loading){return}
    if(options.length==0){sopt()}
-   let cp_s=standard*.02
+   let cp_s=standard*.01
    cp[0]=[cp_s,cp_s,dimensions[0]-cp_s*2,dimensions[1]-cp_s*2]
    cpf()
+   for(n in buttons){dbtns(buttons[n])}
+
   }
+
 
 
 
@@ -485,7 +585,7 @@ function stringify(s){return JSON.stringify(s)}
     ctx.strokeRect(cp[0][0],cp[0][1],cp[0][2],cp[0][3])
     ctx.restore()
     //d_logo(imgs[3],[dimensions[0]/2,dimensions[1]/2],standard*.8,.2,true)
-    if(cp[1]){d_logo(cp[1],[dimensions[0]/2,dimensions[1]/2],standard*.5,1)}
+    if(cp[1]){d_logo(cp[1],[dimensions[0]/2,dimensions[1]/2],standard*.3,1)}
   }
   function d_logo(i,d,s,a,islogo){
     ctx.save()
@@ -501,18 +601,20 @@ function stringify(s){return JSON.stringify(s)}
 <script id='current'> </script>
 
 <script id="update">
-  let upvs=['imgs']
+  let upvs=['imgs','l','buttons']
   var ui_s=false
   var online=true
-  var offlinemode=false
+  var offlinemode=true
 
   function update(){
-   if(!online&&!offlinemode){offline();return}
+   if(!document.readyState==='complete'){return}
+   c_c()
+   if(errd){showerr();return}
    if(upvars){
      for(n in upvs){window['up_'+upvs[n]]()}
      upvars=false
     }
-    c_c()
+    if(!online&&!offlinemode){offline();return}
     if(current){window[current]()}
     if(ui_s){ui()}
     if(loading){loading_()}
