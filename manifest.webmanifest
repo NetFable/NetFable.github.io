@@ -1,13 +1,13 @@
 {
     "theme_color": "#414040",
     "background_color": "#000000",
-    "display": "standalone",
+    "display": "fullscreen",
     "orientation":"landscape",
     "scope": ".",
     "start_url": "/",
     "name": "NetFable",
     "short_name": "NetFable",
-    "description": "The open universe browser online mmorpg game",
+    "description": "The Online Open Universe Multiplayer Game",
   "icons": [{
     "src": "ss.svg",
     "sizes": "16x16 36x36 48x48 57x57 60x60 72x72 76x76 96x96 114x114 120x120 128x128 144x144 152x152 180x180 192x192 256x256 384x384 512x512",
