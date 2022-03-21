@@ -480,7 +480,7 @@ var up_buttons=function(){}
   
 </script>
 <script id="'shapes">
-  let g_rate=[0,.4,.01]
+  let g_rate=[0,.8,.02]
   function d_arrow(s){
     ctx.save()
     ctx.translate(0,-s*.8)
@@ -490,7 +490,7 @@ var up_buttons=function(){}
     ctx.lineTo(0,-s*2)
     ctx.closePath()
     g_rate=interpolate_o(g_rate)
-    ctx.globalAlpha=.1+g_rate[0]
+    ctx.globalAlpha=.2+g_rate[0]
     ctx.fill()
     ctx.restore()
   }
