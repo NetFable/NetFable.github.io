@@ -44,10 +44,10 @@
   var upvars=false
   var state
   function resizeCanvas(){
-  if(!document.fullscreen&&!document.webkitFullscreenElement&& !document.mozFullScreenElement && !document.msFullscreenElement){ //|| window.innerWidth<window.innerHeight){
-    fs=false;
+  if(document.fullscreen||document.webkitFullscreenElement||document.mozFullScreenElement||document.msFullscreenElement){ //|| window.innerWidth<window.innerHeight){
+    fs=true;
   }else{
-    fs=true
+    fs=false
   }
 
   CANVAS_WIDTH = window.innerWidth;
@@ -132,11 +132,14 @@ window.addEventListener('resize',function(){
 
  /////loading////
  var loading=true
- let s=standard*.25
+ var s=standard*.25
+ var as=as=s+s*.05
+ var lw=[[s*.4,s*.3],[s*.3,s*.2]] 
  const rotation=pi*.03
  let lrot=0
  let l_rate=[1,10,.3]
  var imgs
+ var  dh=[dimensions[0]/2,dimensions[1]/2]
  var queue=[]//[target,downloadedv,state,dir[dir,isfunction]],alt,isvital
  function que_a(tar,dir,isfun,alt,isvital){let an=queue.length;if(queue.length>0){for(n in queue){if(queue[n].length==0){an=n;}}};queue[an]=[tar,false,false,[dir,isfun]];queue[an][4]=alt;queue[an][5]=isvital;loading=true;}
  function err(n){let t2=queue[n][4];if(t2){queue[n][0]=t2;queue[n][4]=false;queue[n][2]=false;return}else{if(queue[n][5]){notify='showerr'}else{queue[n]=false}}}
@@ -151,29 +154,34 @@ window.addEventListener('resize',function(){
       for(n in queue){if(queue[n]){deter=true};break}
       if(!deter){queue=[]}
     }else{loading=false}
-  if(!imgs){
-    up_imgs()
-    return
-  }
+
+
 
   ctx.save()
   //l_rate=interpolate_o(l_rate)
   //ctx.shadowBlur=10+5*l_rate[0]
-  ctx.shadowBlur=10
+  ctx.shadowBlur=60
   ctx.shadowColor='teal'
+  ctx.translate(dh[0],dh[1])
+
+  d_arrows(as)
+
   //let as=s+s*.005*l_rate[0]
   //let as=s+s*.05
-  let d=[dimensions[0]/2,dimensions[1]/2]
   lrot+=rotation
-  ctx.drawImage(imgs[0],0,0)
-  rot_c(d,lrot)
+  //ctx.drawImage(imgs[0],0,0)
+  //rot_c(dh,lrot)
+  d_bcircle(as,lw[0])
+
   //imgs[1].style.height=standard*7
-  ctx.drawImage(imgs[1],0,0)
-  rot_c(d,-2*lrot)
-  ctx.drawImage(imgs[2],0,0)
+  //ctx.drawImage(imgs[1],0,0)
+  //rot_c(dh,-2*lrot)
+  //ctx.drawImage(imgs[2],0,0)
+  d_scircle(as,lw[1])
 
 
   ctx.restore()
+
   //let as=s+s/80*l_rate[0]
 
 
@@ -195,11 +203,12 @@ function rot_c(d,r){
   n_arrow([0,-as*1.3],as,0)
  }
  function d_bcircle(as,lw){
+  ctx.rotate(lrot)
   n_circle_fixed([0,0],as,lw,0)
   d_blocks(as,true)
  }
  function d_scircle(as,lw){
-  ctx.ashadowColor=0
+  ctx.rotate(-2*lrot)
   n_circle_fixed([0,0],as/2,lw,0)
   d_blocks(as,false)
  }
@@ -276,30 +285,8 @@ function n_line(d,sz,r,big){
 
 function up_imgs(){
  s=standard*.25
- let lw=[[s*.4,s*.3],[s*.3,s*.2]] 
- ctx.save()
- ctx.shadowBlur=10
- ctx.shadowColor='teal'
- let d=[dimensions[0]/2,dimensions[1]/2]
- let as=s+s*.05
- imgs=[]
- ctx.translate(d[0],d[1])
- d_arrows(as)
- imgs[0]=set_img(canvas.toDataURL())
- cc_c(d)
- d_bcircle(as,lw[0])
- imgs[1]=set_img(canvas.toDataURL())
- cc_c(d)
- d_scircle(as,lw[1])
- imgs[2]=set_img(canvas.toDataURL())
- cc_c(d)
- d_arrows(as)
- d_bcircle(as,lw[0])
- d_scircle(as,lw[1])
- imgs[3]=set_img(canvas.toDataURL())
- cc_c(d)
-
- ctx.restore()
+ lw=[[s*.4,s*.3],[s*.3,s*.2]] 
+ as=s+s*.05
 
 }
 
@@ -487,9 +474,10 @@ let nc=0
 let notc='teal'
 function show_pad(){
  //if(buttons.length==0){set_btns([[0,-.2,[.5,.5],.3,'seagreen','lime',2*pi]]);buttons[0].av=true}
- cpf()
  let pc=[dimensions[0]/2,dimensions[1]/2,standard*.8]
  ctx.save()
+ cpf()
+
  p_time=interpolate_o(p_time)
  nc+=.3
  ctx.shadowBlur=50+50*p_time[0];ctx.shadowColor=notc
@@ -619,7 +607,7 @@ function set_img(v){
   if(options==[]){return};for(n in options){if(n>3){return};buttons[n][0]=av_l[options[n]];buttons[n][6]=2*pi+n*(pi*.5);buttons[n].av=true;}
   }
   
-  function ui(){window[ui_c]()}
+  function ui(){if(!loading){window[ui_c]()}}
   function setgeos(v){geos=v;localStorage.setItem('geos',crypt(stringify(geos)));}
   
   function uidown(v){
@@ -654,10 +642,6 @@ function set_img(v){
   }
 
 
-
-
-
-
   function d_logo(i,d,s,a,islogo){
     ctx.save()
     if(islogo){s=[s/(d[1]/d[0]),s]}else{s=[s,s]}
@@ -668,16 +652,21 @@ function set_img(v){
 </script>
 
 <script id='control'>
-var interval
-window.addEventListener("gamepadconnected", function(e) {
-  notc='teal';nc=0;notif('show_pad');
-  console.log('connected !')
-  })
-window.addEventListener("gamepaddisconnected", function(e) {
-  notc='darkred';nc=0;notif('show_pad');
-  console.log('Disconnected !')
+let pad_con=false
+let pad_ix={}
 
+window.addEventListener("gamepaddisconnected", function(e) {
+  let ix=e.gamepad.index
+  if(pad_ix[ix]){pad_ix[ix]=false;notipad('gold')}
+  notipad('gold')
+  console.log(pad_ix)
+ })
+ window.addEventListener("gamepadconnected"||"webkitgamepadconnected", function(e) {
+  let ix=e.gamepad.index
+  if(!pad_ix[ix]){pad_ix[ix]=true;notipad('teal')}
+  console.log(pad_ix)
   })
+  function notipad(c){notc=c;nc=0;notif('show_pad'); }
 </script>
 
 <script id='current'> </script>
